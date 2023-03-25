@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12) # Don't bump this version for no reason
-project("llama.cpp" C CXX)
+project("pyllama.cpp" C CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -251,9 +251,6 @@ endif()
 
 add_executable(main main.cpp)
 target_link_libraries(main PRIVATE llama ggml utils)
-
-add_executable(quantize quantize.cpp)
-target_link_libraries(quantize PRIVATE llama ggml utils)
 
 #
 # programs, examples and tests

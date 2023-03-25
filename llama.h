@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <vector>
+
 #ifdef LLAMA_SHARED
 #    ifdef _WIN32
 #        ifdef LLAMA_BUILD
@@ -113,6 +115,7 @@ extern "C" {
     // Get the embeddings for the input
     // shape: [n_embd] (1-dimensional)
     LLAMA_API float * llama_get_embeddings(struct llama_context * ctx);
+    const std::vector<float>& llama_get_embeddings_vector(struct llama_context* ctx);
 
     // Token Id -> String. Uses the vocabulary in the provided context
     LLAMA_API const char * llama_token_to_str(struct llama_context * ctx, llama_token token);

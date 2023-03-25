@@ -1025,12 +1025,13 @@ static bool llama_eval_internal(
     }
 
     // extract embeddings
-    if (lctx.embedding.size()) {
-        auto & embedding_out = lctx.embedding;
+    // if (lctx.embedding.size()) {
+    auto & embedding_out = lctx.embedding;
 
-        embedding_out.resize(n_embd);
-        memcpy(embedding_out.data(), (float *) ggml_get_data(embeddings) + (n_embd*(N - 1)), sizeof(float)*n_embd);
-    }
+    embedding_out.resize(n_embd);
+    printf("Embeddings size: %u/%u", embedding_out.size(), n_embd);
+    memcpy(embedding_out.data(), (float *) ggml_get_data(embeddings) + (n_embd*(N - 1)), sizeof(float)*n_embd);
+    // }
 
     if (mem_per_token == 0) {
         mem_per_token = ggml_used_mem(ctx0)/N;
@@ -1737,6 +1738,10 @@ float * llama_get_logits(struct llama_context * ctx) {
 
 float * llama_get_embeddings(struct llama_context * ctx) {
     return ctx->embedding.data();
+}
+
+const std::vector<float>& llama_get_embeddings_vector(struct llama_context* ctx) {
+    return ctx->embedding;
 }
 
 const char * llama_token_to_str(struct llama_context * ctx, llama_token token) {
