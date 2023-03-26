@@ -1029,7 +1029,6 @@ static bool llama_eval_internal(
     auto & embedding_out = lctx.embedding;
 
     embedding_out.resize(n_embd);
-    printf("Embeddings size: %u/%u", embedding_out.size(), n_embd);
     memcpy(embedding_out.data(), (float *) ggml_get_data(embeddings) + (n_embd*(N - 1)), sizeof(float)*n_embd);
     // }
 

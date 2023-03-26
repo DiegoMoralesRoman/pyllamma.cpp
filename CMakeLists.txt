@@ -72,6 +72,8 @@ set(CMAKE_C_STANDARD_REQUIRED true)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
+add_compile_options(-fPIC)
+
 if (NOT MSVC)
     if (LLAMA_SANITIZE_THREAD)
         add_compile_options(-fsanitize=thread)
@@ -252,14 +254,24 @@ endif()
 add_executable(main main.cpp)
 target_link_libraries(main PRIVATE llama ggml utils)
 
-#
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+find_package(Boost REQUIRED python)
+
+include_directories(${BOOST_INCLUDE_DIRS})
+message("boost lib: ${Boost_LIBRARIES}")
+message("boost inc:${Boost_INCLUDE_DIR}")
+
+add_library(pyllamacpp SHARED module.cpp)
+target_link_libraries(pyllamacpp llama ggml utils ${Boost_LIBRARIES}) 
+target_include_directories(pyllamacpp PUBLIC /usr/include/python3.10)
+
 # programs, examples and tests
 #
 
-if (LLAMA_BUILD_TESTS AND NOT CMAKE_JS_VERSION)
-    enable_testing()
-    add_subdirectory(tests)
-endif ()
+# if (LLAMA_BUILD_TESTS AND NOT CMAKE_JS_VERSION)
+#     enable_testing()
+#     add_subdirectory(tests)
+# endif ()
 
 #if (LLAMA_BUILD_EXAMPLES)
 #    add_subdirectory(examples)
