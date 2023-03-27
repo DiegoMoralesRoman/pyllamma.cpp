@@ -1,4 +1,4 @@
-from pyllamacpp import load_model, generate_embeddings
+from pyllamacpp import load_model, generate_embeddings, tokenize, generate_from_tokens
 import numpy as np
 
 def cosine_similarity(a, b):
@@ -13,18 +13,26 @@ def cosine_similarity(a, b):
 
 load_model("models/7B/ggml-model-q4_0.bin")
 
-print("Generating embeddings...")
+TXT = "I would like to know more about engineering. Also biology"
+tokens = tokenize(TXT)
+embeddings = generate_from_tokens(tokens)
 
-base_str = "Processor"
-base = generate_embeddings(base_str)
 
-similarities = {}
-for test_str in ["Computer", "Medical equipement", "Literature", "History"]:
-    print(f'Generating embedding for {test_str}')
-    embedding = generate_embeddings(test_str)
-    similarities[test_str] = cosine_similarity(base, embedding)
+for s in ["Computer", "Science", "History", "Literature"]:
+    print(f'{s}: {cosine_similarity(embeddings, generate_embeddings(s))}')
 
-print(f"Similarities with {base_str}")
-for key, value in similarities.items():
-    print(f'{key}: {value}')
+# print("Generating embeddings...")
+
+# base_str = "Processor"
+# base = generate_embeddings(base_str)
+
+# similarities = {}
+# for test_str in ["Computer", "Medical equipement", "Literature", "History"]:
+#     print(f'Generating embedding for {test_str}')
+#     embedding = generate_embeddings(test_str)
+#     similarities[test_str] = cosine_similarity(base, embedding)
+
+# print(f"Similarities with {base_str}")
+# for key, value in similarities.items():
+#     print(f'{key}: {value}')
 
