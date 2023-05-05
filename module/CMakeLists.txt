@@ -11,6 +11,6 @@ target_include_directories(pyllamacpp PUBLIC /usr/include/python3.10)
 
 add_custom_command(TARGET pyllamacpp POST_BUILD
     COMMAND printf "Python module built, copying back..."
-    COMMAND cp libpyllamacpp.so ../../module
+    COMMAND cp libpyllamacpp.so ${CMAKE_SOURCE_DIR}/pyllamacpp
 )
 

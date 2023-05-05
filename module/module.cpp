@@ -1,15 +1,17 @@
 #include <Python.h>
 #include <boost/python.hpp>
 #include <boost/python/list.hpp>
+#include <string>
+
+#include <iostream>
 
 namespace py = boost::python;
 
-#include <iostream>
-void foo() {
-    std::cout << "Hola, esto es una prueba funcionando desde C++\n";
+void load_model(const std::string& path) {
+    std::cout << "Loading model from path (C++) " << path << '\n';
 }
 
 BOOST_PYTHON_MODULE(pyllamacpp) {
     using namespace py;
-    def("say_hello", foo);
+    def("load_model", load_model);
 }
