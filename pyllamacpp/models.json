@@ -1,0 +1,10 @@
+{
+    "llamacpp": {
+        "module": "pyllamacpp",
+        "path_required": true
+    },
+    "test": {
+        "module": "test",
+        "path_required": false
+    }
+}
