@@ -7,10 +7,12 @@ include_directories(include)
 set (SOURCES
     tokens
     converters
+    embeddings
 )
 
 set (HEADERS
     tokens
+    embeddings
 )
 
 # Modify SOURCES and HEADERS to add prefix and sufix

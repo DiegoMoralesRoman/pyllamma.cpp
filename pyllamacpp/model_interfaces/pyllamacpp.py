@@ -28,6 +28,9 @@ else:
         def tokenize(string: str):
             return mod.tokenize(string)
 
+        def generate_embeddings(string: str):
+            return mod.generate_embeddings(string)
+
     except ImportError as e:
         log.error(f'''
         Failed to load "{SO_LOCATION}"
@@ -38,3 +41,4 @@ else:
 # Add the defined functions to the module namespace
 globals()['load_model'] = load_model
 globals()['tokenize'] = tokenize
+globals()['generate_embeddings'] = generate_embeddings

@@ -56,7 +56,6 @@ def load_model(path: str):
     @param path: The path to the model file.
     @return: The loaded model.
     """
-    global mod
     return mod.load_model(path)
 
 @ensure_initialized
@@ -66,5 +65,13 @@ def tokenize(string: str):
     @param string: The string to tokenize.
     @return: The tokenized string.
     """
-    global mod
     return mod.tokenize(string)
+
+@ensure_initialized
+def generate_embeddings(prompt: str):
+    """
+    Generates embeddings from prompt with loaded model
+    @param prompt Text to generate the emebddings from
+    @return List[Float] of embeddings
+    """
+    return mod.generate_embeddings(prompt)

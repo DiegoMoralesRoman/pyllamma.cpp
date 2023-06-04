@@ -76,5 +76,39 @@ log.info(f'Loading LLaMA model from "{args.model_path}"...')
 model_inteface.load_model(args.model_path)
 
 # Try embedding
-tokens = model_inteface.tokenize(args.prompt)
-print([tok.token for tok in tokens])
+# Text embeddings generation
+prompts = [
+    'Poetry',
+    'Literature',
+    'Calculus',
+    'Engineering',
+    'Maths'
+]
+
+# master_prompt = 'Engineering'
+# print(f'Generating embeddings for: {master_prompt}')
+# base_embedding = list(model_inteface.generate_embeddings(master_prompt))
+# comparison_embeddings = []
+# for prompt in prompts:
+#     print(f'Generating embeddings for: {prompt}')
+#     comparison_embeddings.append((prompt, list(model_inteface.generate_embeddings(prompt))))
+#
+# # Compare results
+# import numpy as np
+#
+# def cosine_similarity(vec1, vec2):
+#     # Compute the dot product of vec1 and vec2
+#     dot_product = np.dot(vec1, vec2)
+#
+#     # Compute the L2 norms (or Euclidean norms) of vec1 and vec2
+#     norm_vec1 = np.linalg.norm(vec1)
+#     norm_vec2 = np.linalg.norm(vec2)
+#
+#     # Compute the cosine similarity
+#     cosine_similarity = dot_product / (norm_vec1 * norm_vec2)
+#
+#     return cosine_similarity
+#
+# print(f'Similarities with {master_prompt}')
+# for prompt, embeddings in comparison_embeddings:
+#     print(f'{prompt}: {cosine_similarity(np.array(base_embedding), np.array(embeddings))}')

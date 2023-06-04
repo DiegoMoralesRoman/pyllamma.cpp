@@ -46,7 +46,7 @@ class ProgressBar:
     def __iter__(self):
         """
         Iterates over the iterable and updates the progress bar for each iteration
-        """
+            """
         self.start_time = time.time()
         self.last_update = 0
         for i, item in enumerate(self.iterable):

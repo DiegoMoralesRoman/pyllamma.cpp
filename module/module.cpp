@@ -1,8 +1,10 @@
+#include "embeddings.hpp"
 #include "examples/common.h"
 #include <Python.h>
 #include <boost/python.hpp>
 #include <boost/python/def.hpp>
 #include <boost/python/list.hpp>
+#include <boost/python/object.hpp>
 #include <functional>
 #include <string>
 
@@ -23,10 +25,15 @@ namespace py = boost::python;
 llama_context* ctx = nullptr;
 
 void load_model(const std::string& path) {
+    // Initialize parameters
     gpt_params params;
     params.model = path.c_str();
     params.n_ctx = 2048;
+    params.embedding = true;
 
+    params.seed = time(NULL);
+
+    // Check if model exists
     if (!std::filesystem::exists(path)) {
         std::string error = "Failed to load model at \"";
         error += path;
@@ -35,6 +42,7 @@ void load_model(const std::string& path) {
         py::throw_error_already_set();
     }
 
+    // Load model from the parameters
     ctx = llama_init_from_gpt_params(params);
 
     if (!ctx) {
@@ -42,9 +50,6 @@ void load_model(const std::string& path) {
         PyErr_SetString(PyExc_ImportError, error.c_str());
         py::throw_error_already_set();
     }
-
-
-    params.embedding = true;
 }
 
 void check_ctx_status() {
@@ -61,6 +66,26 @@ std::vector<pyllama::Token> tokenize_wrapper(char* const str) {
     return pyllama::tokenize(ctx, str);
 }
 
+std::vector<float> generate_embeddings_wrapper(char* const str) {
+    std::string prompt(str);
+    auto inference = pyllama::generate_embeddings(prompt, ctx, std::thread::hardware_concurrency());
+    if (inference.has_value()){
+        return *inference;
+    } else {
+        // Throw exception
+        std::string error = std::string("Failed to run inference on data:\n") + str;
+        PyErr_SetString(PyExc_RuntimeError, error.c_str());
+        py::throw_error_already_set();
+    }
+    return std::vector<float>(); // Default value (although it shouldn't be used)
+}
+
+std::vector<float> generate_embeddings_from_tokens_wrapper(py::list list) {
+    // Convert list into std::vector
+    size_t list_len = py::len(list);
+    return std::vector<float>();
+}
+
 
 BOOST_PYTHON_MODULE(pyllamacpp) {
     using namespace py;
@@ -68,8 +93,13 @@ BOOST_PYTHON_MODULE(pyllamacpp) {
     class_<std::vector<pyllama::Token>>("TokenList")
         .def(vector_indexing_suite<std::vector<pyllama::Token>>());
 
+    class_<std::vector<float>>("Embeddings")
+        .def(vector_indexing_suite<std::vector<float>>());
+
     def("load_model", load_model);
     def("tokenize", tokenize_wrapper);
+
+    def("generate_embeddings", generate_embeddings_wrapper);
 
     class_<pyllama::Token>("Token", no_init)
         .def_readwrite("token", &pyllama::Token::token)
